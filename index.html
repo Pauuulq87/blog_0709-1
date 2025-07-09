@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vibe Coding Academy - 網站需求收集器</title>
+    <link rel="stylesheet" href="src/styles/global.css">
+    <link rel="stylesheet" href="src/styles/cards.css">
+    <link rel="stylesheet" href="src/styles/animations.css">
+</head>
+<body>
+    <div id="app" class="app-container">
+        <header class="app-header">
+            <h1 class="app-title">🎮 Vibe Coding Academy</h1>
+            <p class="app-subtitle">遊戲化網站需求收集器</p>
+        </header>
+
+        <main class="main-content">
+            <div id="loading-screen" class="loading-screen">
+                <div class="loading-spinner"></div>
+                <p>正在初始化遊戲引擎...</p>
+            </div>
+
+            <div id="game-container" class="game-container hidden">
+                <div class="progress-bar-container">
+                    <div id="progress-bar" class="progress-bar"></div>
+                    <span id="progress-text" class="progress-text">0 / 5</span>
+                </div>
+
+                <div id="dialogue-box" class="dialogue-box">
+                    <div class="dialogue-avatar">
+                        <img src="src/assets/mentor-avatar.png" alt="導師" class="avatar-img">
+                    </div>
+                    <div class="dialogue-content">
+                        <h3 id="dialogue-title" class="dialogue-title">歡迎來到 Vibe Coding Academy</h3>
+                        <p id="dialogue-text" class="dialogue-text">我是你的專屬導師，將引導你完成網站需求收集的旅程。準備好開始了嗎？</p>
+                    </div>
+                </div>
+
+                <div id="card-container" class="card-container">
+                    <!-- 卡牌將由 JavaScript 動態生成 -->
+                </div>
+
+                <div class="action-buttons">
+                    <button id="start-btn" class="btn btn-primary">開始收集需求</button>
+                    <button id="next-btn" class="btn btn-secondary hidden">下一步</button>
+                    <button id="back-btn" class="btn btn-tertiary hidden">上一步</button>
+                </div>
+            </div>
+
+            <div id="results-container" class="results-container hidden">
+                <h2>需求收集完成！</h2>
+                <div id="results-summary" class="results-summary">
+                    <!-- 結果摘要將由 JavaScript 生成 -->
+                </div>
+                <div class="download-buttons">
+                    <button id="download-json" class="btn btn-success">下載 JSON 格式</button>
+                    <button id="download-markdown" class="btn btn-success">下載 Markdown 格式</button>
+                </div>
+            </div>
+        </main>
+
+        <footer class="app-footer">
+            <p>&copy; 2025 Vibe Coding Academy - 由 Claude Code 建置</p>
+        </footer>
+    </div>
+
+    <!-- JavaScript 模組 -->
+    <script src="src/components/Card.js"></script>
+    <script src="src/components/DialogueBox.js"></script>
+    <script src="src/components/ProgressBar.js"></script>
+    <script src="src/utils/requirementParser.js"></script>
+    <script src="src/utils/outputGenerator.js"></script>
+    <script src="src/utils/validationHelper.js"></script>
+    <script src="src/collectors/ProjectTypeCollector.js"></script>
+    <script src="src/collectors/DesignStyleCollector.js"></script>
+    <script src="src/collectors/FeatureCollector.js"></script>
+    <script src="src/collectors/TechStackCollector.js"></script>
+    <script src="src/collectors/DeploymentCollector.js"></script>
+    <script src="src/app.js"></script>
+</body>
+</html>

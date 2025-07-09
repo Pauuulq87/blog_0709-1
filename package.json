@@ -1,0 +1,22 @@
+{
+  "name": "vibe-coding-academy",
+  "version": "1.0.0",
+  "description": "遊戲化的網站需求收集器",
+  "main": "index.html",
+  "scripts": {
+    "start": "python -m http.server 8000",
+    "serve": "npx serve .",
+    "dev": "python -m http.server 8000"
+  },
+  "keywords": [
+    "requirement-collection",
+    "gamification",
+    "ui-ux",
+    "web-development",
+    "no-code"
+  ],
+  "author": "Claude Code",
+  "license": "MIT",
+  "devDependencies": {},
+  "dependencies": {}
+}
