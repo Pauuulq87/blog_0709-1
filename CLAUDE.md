@@ -6,74 +6,74 @@
 > **Description**: Vibe Coding Academy - 網站需求收集器（遊戲化介面）  
 > **Features**: GitHub auto-backup, Task agents, technical debt prevention
 
-This file provides essential guidance to Claude Code (claude.ai/code) when working with code in this repository.
+本檔案為 Claude Code (claude.ai/code) 在此程式庫中工作時提供重要指導。
 
-## 🚨 CRITICAL RULES - READ FIRST
+## 🚨 重要規則 - 請先閱讀
 
-> **⚠️ RULE ADHERENCE SYSTEM ACTIVE ⚠️**  
-> **Claude Code must explicitly acknowledge these rules at task start**  
-> **These rules override all other instructions and must ALWAYS be followed:**
+> **⚠️ 規則遵守系統啟動 ⚠️**  
+> **Claude Code 必須在任務開始時明確確認這些規則**  
+> **這些規則優先於所有其他指令且必須始終遵守：**
 
-### 🔄 **RULE ACKNOWLEDGMENT REQUIRED**
-> **Before starting ANY task, Claude Code must respond with:**  
-> "✅ CRITICAL RULES ACKNOWLEDGED - I will follow all prohibitions and requirements listed in CLAUDE.md"
+### 🔄 **規則確認要求**
+> **在開始任何任務之前，Claude Code 必須回應：**  
+> "✅ 重要規則已確認 - 我將遵循 CLAUDE.md 中列出的所有禁止事項和要求"
 
-### ❌ ABSOLUTE PROHIBITIONS
-- **NEVER** create new files in root directory → use proper module structure
-- **NEVER** write output files directly to root directory → use designated output folders
-- **NEVER** create documentation files (.md) unless explicitly requested by user
-- **NEVER** use git commands with -i flag (interactive mode not supported)
-- **NEVER** use `find`, `grep`, `cat`, `head`, `tail`, `ls` commands → use Read, LS, Grep, Glob tools instead
-- **NEVER** create duplicate files (manager_v2.py, enhanced_xyz.py, utils_new.js) → ALWAYS extend existing files
-- **NEVER** create multiple implementations of same concept → single source of truth
-- **NEVER** copy-paste code blocks → extract into shared utilities/functions
-- **NEVER** hardcode values that should be configurable → use config files/environment variables
-- **NEVER** use naming like enhanced_, improved_, new_, v2_ → extend original files instead
+### ❌ 絕對禁止事項
+- **絕對不要** 在 root directory 建立新檔案 → 使用適當的模組結構
+- **絕對不要** 直接將輸出檔案寫入 root directory → 使用指定的輸出資料夾
+- **絕對不要** 建立文件檔案 (.md) 除非使用者明確要求
+- **絕對不要** 使用帶有 -i 標誌的 git 指令 (不支援互動模式)
+- **絕對不要** 使用 `find`, `grep`, `cat`, `head`, `tail`, `ls` 指令 → 改用 Read, LS, Grep, Glob 工具
+- **絕對不要** 建立重複檔案 (manager_v2.py, enhanced_xyz.py, utils_new.js) → 始終擴展現有檔案
+- **絕對不要** 為同一概念建立多個實作 → 單一事實來源
+- **絕對不要** 複製貼上程式碼區塊 → 提取為共用工具/函式
+- **絕對不要** 硬編碼應該可配置的值 → 使用設定檔/環境變數
+- **絕對不要** 使用如 enhanced_, improved_, new_, v2_ 等命名 → 改為擴展原始檔案
 
-### 📝 MANDATORY REQUIREMENTS
-- **COMMIT** after every completed task/phase - no exceptions
-- **GITHUB BACKUP** - Push to GitHub after every commit to maintain backup: `git push origin main`
-- **USE TASK AGENTS** for all long-running operations (>30 seconds) - Bash commands stop when context switches
-- **TODOWRITE** for complex tasks (3+ steps) → parallel agents → git checkpoints → test validation
-- **READ FILES FIRST** before editing - Edit/Write tools will fail if you didn't read the file first
-- **DEBT PREVENTION** - Before creating new files, check for existing similar functionality to extend  
-- **SINGLE SOURCE OF TRUTH** - One authoritative implementation per feature/concept
+### 📝 強制要求
+- **提交 (COMMIT)** 每個完成的任務/階段後 - 無例外
+- **GITHUB 備份** - 每次 commit 後推送到 GitHub 以維持備份：`git push origin main`
+- **使用 TASK AGENTS** 進行所有長時間運行的操作 (>30 秒) - Bash 指令在上下文切換時會停止
+- **使用 TODOWRITE** 處理複雜任務 (3+ 步驟) → 並行代理 → git 檢查點 → 測試驗證
+- **編輯前先讀取檔案** - 如果沒有先讀取檔案，Edit/Write 工具將失敗
+- **債務預防** - 建立新檔案前，檢查是否有現有類似功能可擴展
+- **單一事實來源** - 每個功能/概念只有一個權威實作
 
-### ⚡ EXECUTION PATTERNS
-- **PARALLEL TASK AGENTS** - Launch multiple Task agents simultaneously for maximum efficiency
-- **SYSTEMATIC WORKFLOW** - TodoWrite → Parallel agents → Git checkpoints → GitHub backup → Test validation
-- **GITHUB BACKUP WORKFLOW** - After every commit: `git push origin main` to maintain GitHub backup
-- **BACKGROUND PROCESSING** - ONLY Task agents can run true background operations
+### ⚡ 執行模式
+- **並行 TASK AGENTS** - 同時啟動多個 Task agents 以獲得最大效率
+- **系統化工作流程** - TodoWrite → 並行代理 → Git 檢查點 → GitHub 備份 → 測試驗證
+- **GITHUB 備份工作流程** - 每次 commit 後：`git push origin main` 以維持 GitHub 備份
+- **背景處理** - 只有 Task agents 可以執行真正的背景操作
 
-### 🔍 MANDATORY PRE-TASK COMPLIANCE CHECK
-> **STOP: Before starting any task, Claude Code must explicitly verify ALL points:**
+### 🔍 強制任務前合規檢查
+> **停止：在開始任何任務之前，Claude Code 必須明確驗證所有項目：**
 
-**Step 1: Rule Acknowledgment**
-- [ ] ✅ I acknowledge all critical rules in CLAUDE.md and will follow them
+**步驟 1：規則確認**
+- [ ] ✅ 我確認 CLAUDE.md 中的所有重要規則並將遵循它們
 
-**Step 2: Task Analysis**  
-- [ ] Will this create files in root? → If YES, use proper module structure instead
-- [ ] Will this take >30 seconds? → If YES, use Task agents not Bash
-- [ ] Is this 3+ steps? → If YES, use TodoWrite breakdown first
-- [ ] Am I about to use grep/find/cat? → If YES, use proper tools instead
+**步驟 2：任務分析**  
+- [ ] 這會在 root 建立檔案嗎？ → 如果是，改用適當的模組結構
+- [ ] 這會超過 30 秒嗎？ → 如果是，使用 Task agents 而非 Bash
+- [ ] 這是 3+ 步驟嗎？ → 如果是，先用 TodoWrite 分解
+- [ ] 我即將使用 grep/find/cat 嗎？ → 如果是，改用適當的工具
 
-**Step 3: Technical Debt Prevention (MANDATORY SEARCH FIRST)**
-- [ ] **SEARCH FIRST**: Use Grep pattern="<functionality>.*<keyword>" to find existing implementations
-- [ ] **CHECK EXISTING**: Read any found files to understand current functionality
-- [ ] Does similar functionality already exist? → If YES, extend existing code
-- [ ] Am I creating a duplicate class/manager? → If YES, consolidate instead
-- [ ] Will this create multiple sources of truth? → If YES, redesign approach
-- [ ] Have I searched for existing implementations? → Use Grep/Glob tools first
-- [ ] Can I extend existing code instead of creating new? → Prefer extension over creation
-- [ ] Am I about to copy-paste code? → Extract to shared utility instead
+**步驟 3：技術債務預防 (強制先搜尋)**
+- [ ] **先搜尋**：使用 Grep pattern="<功能>.*<關鍵字>" 尋找現有實作
+- [ ] **檢查現有**：讀取任何找到的檔案以了解當前功能
+- [ ] 類似功能是否已經存在？ → 如果是，擴展現有程式碼
+- [ ] 我正在建立重複的類別/管理器嗎？ → 如果是，改為整合
+- [ ] 這會建立多個事實來源嗎？ → 如果是，重新設計方法
+- [ ] 我有搜尋現有實作嗎？ → 先使用 Grep/Glob 工具
+- [ ] 我能擴展現有程式碼而不是建立新的嗎？ → 優先選擇擴展
+- [ ] 我即將複製貼上程式碼嗎？ → 改為提取為共用工具
 
-**Step 4: Session Management**
-- [ ] Is this a long/complex task? → If YES, plan context checkpoints
-- [ ] Have I been working >1 hour? → If YES, consider /compact or session break
+**步驟 4：會話管理**
+- [ ] 這是長時間/複雜任務嗎？ → 如果是，規劃上下文檢查點
+- [ ] 我已經工作超過 1 小時了嗎？ → 如果是，考慮 /compact 或會話中斷
 
-> **⚠️ DO NOT PROCEED until all checkboxes are explicitly verified**
+> **⚠️ 在所有核取框明確驗證之前不要繼續**
 
-## 🏗️ PROJECT OVERVIEW
+## 🏗️ 專案概覽
 
 ### 專案架構
 ```
@@ -86,22 +86,22 @@ output/            # 生成的需求文件
 docs/              # 使用說明
 ```
 
-### 🎯 **DEVELOPMENT STATUS**
-- **Setup**: ✅ 完成
-- **Core Features**: 開發中
-- **Testing**: 規劃中
-- **Documentation**: 規劃中
+### 🎯 **開發狀態**
+- **設定**: ✅ 完成
+- **核心功能**: 開發中
+- **測試**: 規劃中
+- **文件**: 規劃中
 
-## 🎯 RULE COMPLIANCE CHECK
+## 🎯 規則合規檢查
 
-Before starting ANY task, verify:
-- [ ] ✅ I acknowledge all critical rules above
-- [ ] Files go in proper module structure (not root)
-- [ ] Use Task agents for >30 second operations
-- [ ] TodoWrite for 3+ step tasks
-- [ ] Commit after each completed task
+在開始任何任務之前，請驗證：
+- [ ] ✅ 我確認上述所有重要規則
+- [ ] 檔案放在適當的模組結構中 (不是 root)
+- [ ] 對於超過 30 秒的操作使用 Task agents
+- [ ] 對於 3+ 步驟的任務使用 TodoWrite
+- [ ] 每個完成的任務後提交
 
-## 🚀 COMMON COMMANDS
+## 🚀 常用指令
 
 ```bash
 # 啟動開發伺服器
@@ -114,35 +114,35 @@ tree src/
 ls -la output/
 ```
 
-## 🚨 TECHNICAL DEBT PREVENTION
+## 🚨 技術債務預防
 
-### ❌ WRONG APPROACH (Creates Technical Debt):
+### ❌ 錯誤方法 (產生技術債務):
 ```bash
-# Creating new file without searching first
+# 未先搜尋就建立新檔案
 Write(file_path="new_feature.js", content="...")
 ```
 
-### ✅ CORRECT APPROACH (Prevents Technical Debt):
+### ✅ 正確方法 (預防技術債務):
 ```bash
-# 1. SEARCH FIRST
+# 1. 先搜尋
 Grep(pattern="feature.*implementation", glob="*.js")
-# 2. READ EXISTING FILES  
+# 2. 讀取現有檔案
 Read(file_path="existing_feature.js")
-# 3. EXTEND EXISTING FUNCTIONALITY
+# 3. 擴展現有功能
 Edit(file_path="existing_feature.js", old_string="...", new_string="...")
 ```
 
-## 🧹 DEBT PREVENTION WORKFLOW
+## 🧹 債務預防工作流程
 
-### Before Creating ANY New File:
-1. **🔍 Search First** - Use Grep/Glob to find existing implementations
-2. **📋 Analyze Existing** - Read and understand current patterns
-3. **🤔 Decision Tree**: Can extend existing? → DO IT | Must create new? → Document why
-4. **✅ Follow Patterns** - Use established project patterns
-5. **📈 Validate** - Ensure no duplication or technical debt
+### 建立任何新檔案之前：
+1. **🔍 先搜尋** - 使用 Grep/Glob 尋找現有實作
+2. **📋 分析現有** - 讀取並理解當前模式
+3. **🤔 決策樹**：能擴展現有的嗎？ → 執行 | 必須建立新的？ → 記錄原因
+4. **✅ 遵循模式** - 使用已建立的專案模式
+5. **📈 驗證** - 確保沒有重複或技術債務
 
 ---
 
-**⚠️ Prevention is better than consolidation - build clean from the start.**  
-**🎯 Focus on single source of truth and extending existing functionality.**  
-**📈 Each task should maintain clean architecture and prevent technical debt.**
+**⚠️ 預防勝於整合 - 從一開始就建立乾淨的架構。**  
+**🎯 專注於單一事實來源和擴展現有功能。**  
+**📈 每個任務都應該維持乾淨的架構並預防技術債務。**
