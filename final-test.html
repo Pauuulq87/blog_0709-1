@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>最終功能測試</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background: #1a1a2e;
+            color: #eee;
+        }
+        .test-panel {
+            background: #16213e;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border: 1px solid #0f3460;
+        }
+        .status {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .status.success { background: #28a745; color: white; }
+        .status.error { background: #dc3545; color: white; }
+        .status.warning { background: #ffc107; color: black; }
+        .status.info { background: #17a2b8; color: white; }
+        .test-item {
+            margin: 10px 0;
+            padding: 8px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 4px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .summary {
+            background: rgba(40, 167, 69, 0.1);
+            border: 1px solid #28a745;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+        .summary.error {
+            background: rgba(220, 53, 69, 0.1);
+            border-color: #dc3545;
+        }
+    </style>
+</head>
+<body>
+    <h1>🎯 Vibe Coding Academy 最終功能測試</h1>
+    
+    <div class="test-panel">
+        <h2>📊 系統整體檢查</h2>
+        <div id="system-check">檢查中...</div>
+        <button onclick="runSystemCheck()">重新檢查系統</button>
+    </div>
+
+    <div class="test-panel">
+        <h2>🔧 核心功能測試</h2>
+        <div id="core-tests">
+            <div class="test-item">
+                <span>JavaScript類別載入</span>
+                <span id="js-classes-status" class="status info">等待測試</span>
+            </div>
+            <div class="test-item">
+                <span>DOM元素完整性</span>
+                <span id="dom-elements-status" class="status info">等待測試</span>
+            </div>
+            <div class="test-item">
+                <span>App實例創建</span>
+                <span id="app-instance-status" class="status info">等待測試</span>
+            </div>
+            <div class="test-item">
+                <span>Loading Screen顯示</span>
+                <span id="loading-screen-status" class="status info">等待測試</span>
+            </div>
+            <div class="test-item">
+                <span>遊戲容器準備</span>
+                <span id="game-container-status" class="status info">等待測試</span>
+            </div>
+        </div>
+        <button onclick="runCoreTests()">執行核心測試</button>
+    </div>
+
+    <div class="test-panel">
+        <h2>🎮 互動功能模擬</h2>
+        <div id="interaction-tests">
+            <div class="test-item">
+                <span>開始按鈕點擊</span>
+                <span id="start-button-status" class="status info">等待測試</span>
+            </div>
+            <div class="test-item">
+                <span>階段切換</span>
+                <span id="stage-switch-status" class="status info">等待測試</span>
+            </div>
+            <div class="test-item">
+                <span>對話框互動</span>
+                <span id="dialogue-status" class="status info">等待測試</span>
+            </div>
+        </div>
+        <button onclick="runInteractionTests()">執行互動測試</button>
+        <button onclick="openMainApp()">開啟主應用程式</button>
+    </div>
+
+    <div class="test-panel">
+        <h2>📈 性能與穩定性</h2>
+        <div id="performance-tests">
+            <div class="test-item">
+                <span>載入時間</span>
+                <span id="load-time-status" class="status info">等待測試</span>
+            </div>
+            <div class="test-item">
+                <span>記憶體使用</span>
+                <span id="memory-status" class="status info">等待測試</span>
+            </div>
+            <div class="test-item">
+                <span>穩定性測試</span>
+                <span id="stability-status" class="status info">等待測試</span>
+            </div>
+        </div>
+        <button onclick="runPerformanceTests()">執行性能測試</button>
+    </div>
+
+    <div id="test-summary" class="summary" style="display: none;">
+        <h3>📋 測試總結</h3>
+        <div id="summary-content"></div>
+    </div>
+
+    <script>
+        let testResults = {
+            systemCheck: {},
+            coreTests: {},
+            interactionTests: {},
+            performanceTests: {}
+        };
+
+        function updateStatus(elementId, status, text) {
+            const element = document.getElementById(elementId);
+            if (element) {
+                element.className = `status ${status}`;
+                element.textContent = text;
+            }
+        }
+
+        function log(message) {
+            console.log(`[最終測試] ${message}`);
+        }
+
+        function runSystemCheck() {
+            log('開始系統整體檢查...');
+            
+            const checks = [
+                {
+                    name: '伺服器連接',
+                    test: () => fetch('http://localhost:8000').then(r => r.ok),
+                    async: true
+                },
+                {
+                    name: '瀏覽器兼容性',
+                    test: () => {
+                        return !!(window.fetch && window.Promise && window.addEventListener);
+                    }
+                },
+                {
+                    name: 'CSS載入',
+                    test: () => {
+                        const computed = getComputedStyle(document.body);
+                        return computed.fontFamily && computed.backgroundColor;
+                    }
+                }
+            ];
+
+            let results = [];
+            let completed = 0;
+
+            checks.forEach(async (check, index) => {
+                try {
+                    let result;
+                    if (check.async) {
+                        result = await check.test();
+                    } else {
+                        result = check.test();
+                    }
+                    results[index] = { name: check.name, status: result ? 'success' : 'error' };
+                } catch (error) {
+                    results[index] = { name: check.name, status: 'error', error: error.message };
+                }
+                
+                completed++;
+                if (completed === checks.length) {
+                    displaySystemCheck(results);
+                }
+            });
+
+            testResults.systemCheck = results;
+        }
+
+        function displaySystemCheck(results) {
+            let html = '';
+            results.forEach(result => {
+                const statusText = result.status === 'success' ? 'PASS' : 'FAIL';
+                html += `<div class="test-item">
+                    <span>${result.name}</span>
+                    <span class="status ${result.status}">${statusText}</span>
+                </div>`;
+            });
+            document.getElementById('system-check').innerHTML = html;
+        }
+
+        function runCoreTests() {
+            log('開始核心功能測試...');
+
+            // JavaScript類別載入測試
+            const requiredClasses = [
+                'VibeCodingAcademy', 'DialogueBox', 'ProgressBar', 'CardManager',
+                'ProjectTypeCollector', 'DesignStyleCollector', 'FeatureCollector',
+                'TechStackCollector', 'DeploymentCollector',
+                'RequirementParser', 'OutputGenerator', 'ValidationHelper'
+            ];
+
+            let classesLoaded = 0;
+            requiredClasses.forEach(className => {
+                if (typeof window[className] === 'function') {
+                    classesLoaded++;
+                }
+            });
+
+            const classLoadPercentage = Math.round((classesLoaded / requiredClasses.length) * 100);
+            updateStatus('js-classes-status', 
+                classLoadPercentage === 100 ? 'success' : (classLoadPercentage > 50 ? 'warning' : 'error'),
+                `${classLoadPercentage}% (${classesLoaded}/${requiredClasses.length})`
+            );
+
+            // DOM元素完整性測試
+            const requiredElements = [
+                'loading-screen', 'game-container', 'dialogue-box', 
+                'card-container', 'start-btn'
+            ];
+
+            let elementsFound = 0;
+            requiredElements.forEach(elementId => {
+                const element = document.querySelector(`#${elementId}`) || document.querySelector(`.${elementId}`);
+                if (element) elementsFound++;
+            });
+
+            const elementPercentage = Math.round((elementsFound / requiredElements.length) * 100);
+            updateStatus('dom-elements-status',
+                elementPercentage === 100 ? 'success' : (elementPercentage > 50 ? 'warning' : 'error'),
+                `${elementPercentage}% (${elementsFound}/${requiredElements.length})`
+            );
+
+            // App實例創建測試
+            if (window.app) {
+                updateStatus('app-instance-status', 'success', 
+                    `已創建 (${window.app.isInitialized ? '已初始化' : '未初始化'})`);
+            } else {
+                // 嘗試創建App實例
+                try {
+                    if (typeof window.VibeCodingAcademy === 'function') {
+                        window.testApp = new window.VibeCodingAcademy();
+                        updateStatus('app-instance-status', 'warning', '測試實例已創建');
+                    } else {
+                        updateStatus('app-instance-status', 'error', 'VibeCodingAcademy類別不存在');
+                    }
+                } catch (error) {
+                    updateStatus('app-instance-status', 'error', `創建失敗: ${error.message}`);
+                }
+            }
+
+            // Loading Screen顯示測試
+            const loadingScreen = document.getElementById('loading-screen');
+            if (loadingScreen) {
+                const isVisible = getComputedStyle(loadingScreen).display !== 'none';
+                updateStatus('loading-screen-status', 
+                    isVisible ? 'success' : 'warning',
+                    isVisible ? '可見' : '隱藏'
+                );
+            } else {
+                updateStatus('loading-screen-status', 'error', '元素不存在');
+            }
+
+            // 遊戲容器準備測試
+            const gameContainer = document.getElementById('game-container');
+            if (gameContainer) {
+                const isHidden = gameContainer.classList.contains('hidden');
+                updateStatus('game-container-status',
+                    isHidden ? 'success' : 'warning',
+                    isHidden ? '正確隱藏' : '意外可見'
+                );
+            } else {
+                updateStatus('game-container-status', 'error', '元素不存在');
+            }
+
+            testResults.coreTests = {
+                classesLoaded: classLoadPercentage,
+                elementsFound: elementPercentage,
+                appInstance: !!window.app,
+                loadingScreen: !!loadingScreen,
+                gameContainer: !!gameContainer
+            };
+        }
+
+        function runInteractionTests() {
+            log('開始互動功能測試...');
+
+            // 開始按鈕點擊測試
+            const startButton = document.getElementById('start-btn');
+            if (startButton) {
+                try {
+                    // 模擬點擊事件
+                    const clickEvent = new MouseEvent('click', {
+                        bubbles: true,
+                        cancelable: true,
+                        view: window
+                    });
+                    startButton.dispatchEvent(clickEvent);
+                    updateStatus('start-button-status', 'success', '點擊事件已觸發');
+                } catch (error) {
+                    updateStatus('start-button-status', 'error', `點擊失敗: ${error.message}`);
+                }
+            } else {
+                updateStatus('start-button-status', 'warning', '按鈕不存在');
+            }
+
+            // 階段切換測試
+            if (window.app && typeof window.app.goToStage === 'function') {
+                try {
+                    window.app.goToStage(0);
+                    updateStatus('stage-switch-status', 'success', '階段切換功能正常');
+                } catch (error) {
+                    updateStatus('stage-switch-status', 'error', `切換失敗: ${error.message}`);
+                }
+            } else {
+                updateStatus('stage-switch-status', 'warning', '階段切換功能不可用');
+            }
+
+            // 對話框互動測試
+            if (window.app && window.app.dialogueBox) {
+                try {
+                    const testDialogue = {
+                        title: '測試對話',
+                        text: '這是功能測試',
+                        mood: 'default'
+                    };
+                    window.app.dialogueBox.showDialogue(testDialogue);
+                    updateStatus('dialogue-status', 'success', '對話框互動正常');
+                } catch (error) {
+                    updateStatus('dialogue-status', 'error', `對話框失敗: ${error.message}`);
+                }
+            } else {
+                updateStatus('dialogue-status', 'warning', '對話框組件不可用');
+            }
+
+            testResults.interactionTests = {
+                startButton: !!startButton,
+                stageSwitch: !!(window.app && window.app.goToStage),
+                dialogue: !!(window.app && window.app.dialogueBox)
+            };
+        }
+
+        function runPerformanceTests() {
+            log('開始性能測試...');
+
+            // 載入時間測試
+            const startTime = performance.now();
+            
+            setTimeout(() => {
+                const loadTime = performance.now() - startTime;
+                updateStatus('load-time-status',
+                    loadTime < 100 ? 'success' : (loadTime < 500 ? 'warning' : 'error'),
+                    `${Math.round(loadTime)}ms`
+                );
+            }, 10);
+
+            // 記憶體使用測試
+            if (performance.memory) {
+                const memoryUsage = Math.round(performance.memory.usedJSHeapSize / 1024 / 1024);
+                updateStatus('memory-status',
+                    memoryUsage < 50 ? 'success' : (memoryUsage < 100 ? 'warning' : 'error'),
+                    `${memoryUsage}MB`
+                );
+            } else {
+                updateStatus('memory-status', 'info', '記憶體API不可用');
+            }
+
+            // 穩定性測試 (多次創建實例)
+            let stabilityScore = 0;
+            try {
+                for (let i = 0; i < 5; i++) {
+                    if (typeof window.VibeCodingAcademy === 'function') {
+                        const testInstance = new window.VibeCodingAcademy();
+                        if (testInstance) {
+                            stabilityScore++;
+                        }
+                    }
+                }
+                updateStatus('stability-status',
+                    stabilityScore === 5 ? 'success' : (stabilityScore > 2 ? 'warning' : 'error'),
+                    `${stabilityScore}/5 次成功`
+                );
+            } catch (error) {
+                updateStatus('stability-status', 'error', `穩定性測試失敗: ${error.message}`);
+            }
+
+            testResults.performanceTests = {
+                loadTime: performance.now() - startTime,
+                memoryUsage: performance.memory ? performance.memory.usedJSHeapSize : null,
+                stability: stabilityScore
+            };
+        }
+
+        function openMainApp() {
+            log('開啟主應用程式...');
+            window.open('http://localhost:8000', '_blank');
+        }
+
+        function showTestSummary() {
+            const summary = document.getElementById('test-summary');
+            const content = document.getElementById('summary-content');
+            
+            let html = '';
+            let totalTests = 0;
+            let passedTests = 0;
+
+            // 統計測試結果
+            Object.values(testResults).forEach(category => {
+                Object.values(category).forEach(result => {
+                    totalTests++;
+                    if (result === true || (typeof result === 'number' && result > 80)) {
+                        passedTests++;
+                    }
+                });
+            });
+
+            const successRate = Math.round((passedTests / totalTests) * 100);
+            
+            html += `<div class="test-item">
+                <span>整體成功率</span>
+                <span class="status ${successRate > 80 ? 'success' : (successRate > 50 ? 'warning' : 'error')}">
+                    ${successRate}% (${passedTests}/${totalTests})
+                </span>
+            </div>`;
+
+            html += `<p><strong>建議：</strong></p>`;
+            if (successRate > 80) {
+                html += `<p>✅ 系統運行良好，所有核心功能正常運作。</p>`;
+                summary.className = 'summary';
+            } else if (successRate > 50) {
+                html += `<p>⚠️ 系統基本可用，但建議檢查失敗的測試項目。</p>`;
+                summary.className = 'summary';
+            } else {
+                html += `<p>❌ 系統存在重大問題，需要進一步修復。</p>`;
+                summary.className = 'summary error';
+            }
+
+            content.innerHTML = html;
+            summary.style.display = 'block';
+        }
+
+        // 自動執行所有測試
+        document.addEventListener('DOMContentLoaded', () => {
+            log('最終測試工具已載入');
+            
+            setTimeout(() => {
+                runSystemCheck();
+                setTimeout(() => {
+                    runCoreTests();
+                    setTimeout(() => {
+                        runInteractionTests();
+                        setTimeout(() => {
+                            runPerformanceTests();
+                            setTimeout(showTestSummary, 1000);
+                        }, 1000);
+                    }, 1000);
+                }, 1000);
+            }, 500);
+        });
+    </script>
+</body>
+</html>

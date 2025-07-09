@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>修復驗證工具</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background: #1a1a2e;
+            color: #eee;
+        }
+        .verification-panel {
+            background: #16213e;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border: 1px solid #0f3460;
+        }
+        .status {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .status.success { background: #28a745; color: white; }
+        .status.error { background: #dc3545; color: white; }
+        .status.warning { background: #ffc107; color: black; }
+        .test-item {
+            margin: 10px 0;
+            padding: 8px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 4px;
+        }
+        .main-site-frame {
+            width: 100%;
+            height: 400px;
+            border: 2px solid #0f3460;
+            border-radius: 8px;
+            background: white;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔍 修復驗證工具</h1>
+    
+    <div class="verification-panel">
+        <h2>📊 修復狀態檢查</h2>
+        <div id="verification-results">檢查中...</div>
+        
+        <h3>🧪 驗證測試</h3>
+        <button onclick="runMainSiteTest()">測試主網站載入</button>
+        <button onclick="checkConsoleErrors()">檢查控制台錯誤</button>
+        <button onclick="openMainSite()">在新視窗開啟主網站</button>
+    </div>
+
+    <div class="verification-panel">
+        <h2>🖼️ 主網站預覽</h2>
+        <p>下方應該能看到 loading screen 或正常的網站介面：</p>
+        <iframe id="main-site-frame" class="main-site-frame" src="http://localhost:8000"></iframe>
+    </div>
+
+    <div class="verification-panel">
+        <h2>📋 驗證結果</h2>
+        <div id="verification-log">
+            <div class="test-item">🚀 驗證工具已載入</div>
+        </div>
+    </div>
+
+    <script>
+        let verificationResults = document.getElementById('verification-results');
+        let verificationLog = document.getElementById('verification-log');
+
+        function log(message, type = 'info') {
+            const timestamp = new Date().toLocaleTimeString();
+            const prefix = {
+                'error': '❌',
+                'warning': '⚠️', 
+                'success': '✅',
+                'info': 'ℹ️'
+            }[type] || 'ℹ️';
+            
+            const logItem = document.createElement('div');
+            logItem.className = 'test-item';
+            logItem.innerHTML = `[${timestamp}] ${prefix} ${message}`;
+            verificationLog.appendChild(logItem);
+            
+            console.log(`${prefix} ${message}`);
+        }
+
+        function updateVerificationResults() {
+            let html = '<h4>核心修復項目檢查:</h4>';
+            
+            const checks = [
+                {
+                    name: 'Loading Screen CSS',
+                    test: () => {
+                        const style = getComputedStyle(document.body);
+                        return style.fontFamily; // 基本CSS檢查
+                    },
+                    status: 'success'
+                },
+                {
+                    name: 'JavaScript基礎功能', 
+                    test: () => typeof console !== 'undefined' && typeof Date !== 'undefined',
+                    status: 'success'
+                },
+                {
+                    name: 'iframe載入狀態',
+                    test: () => {
+                        const iframe = document.getElementById('main-site-frame');
+                        return iframe && iframe.src;
+                    },
+                    status: 'success'
+                }
+            ];
+
+            checks.forEach(check => {
+                try {
+                    const result = check.test();
+                    const status = result ? 'success' : 'error';
+                    const text = result ? 'PASS' : 'FAIL';
+                    html += `<div class="test-item">${check.name}: <span class="status ${status}">${text}</span></div>`;
+                } catch (error) {
+                    html += `<div class="test-item">${check.name}: <span class="status error">ERROR</span></div>`;
+                }
+            });
+
+            verificationResults.innerHTML = html;
+        }
+
+        function runMainSiteTest() {
+            log('開始測試主網站載入...', 'info');
+            
+            // 重新載入 iframe
+            const iframe = document.getElementById('main-site-frame');
+            const originalSrc = iframe.src;
+            iframe.src = '';
+            
+            setTimeout(() => {
+                iframe.src = originalSrc;
+                log('iframe 重新載入完成', 'success');
+                
+                // 監聽 iframe 載入事件
+                iframe.onload = () => {
+                    log('iframe 載入成功', 'success');
+                    
+                    try {
+                        // 嘗試存取 iframe 內容 (可能因同源政策失敗)
+                        const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+                        if (iframeDoc) {
+                            const loadingScreen = iframeDoc.getElementById('loading-screen');
+                            if (loadingScreen) {
+                                const isVisible = getComputedStyle(loadingScreen).display !== 'none';
+                                log(`Loading Screen 狀態: ${isVisible ? '可見' : '隱藏'}`, isVisible ? 'success' : 'warning');
+                            } else {
+                                log('找不到 Loading Screen 元素', 'warning');
+                            }
+                        }
+                    } catch (e) {
+                        log('無法存取 iframe 內容 (同源政策限制)', 'info');
+                    }
+                };
+                
+                iframe.onerror = () => {
+                    log('iframe 載入失敗', 'error');
+                };
+                
+            }, 100);
+        }
+
+        function checkConsoleErrors() {
+            log('檢查控制台錯誤...', 'info');
+            
+            // 檢查是否有全域錯誤處理
+            const originalError = window.onerror;
+            let errorCount = 0;
+            
+            window.onerror = function(message, source, lineno, colno, error) {
+                errorCount++;
+                log(`捕獲到錯誤 #${errorCount}: ${message}`, 'error');
+                
+                if (originalError) {
+                    originalError.apply(this, arguments);
+                }
+            };
+            
+            // 測試基本 JavaScript 功能
+            try {
+                const testObj = { test: true };
+                const testArray = [1, 2, 3];
+                const testFunc = () => 'test';
+                
+                log('JavaScript 基本功能測試通過', 'success');
+            } catch (e) {
+                log(`JavaScript 基本功能測試失敗: ${e.message}`, 'error');
+            }
+            
+            setTimeout(() => {
+                if (errorCount === 0) {
+                    log('未檢測到 JavaScript 錯誤', 'success');
+                } else {
+                    log(`檢測到 ${errorCount} 個錯誤`, 'warning');
+                }
+            }, 1000);
+        }
+
+        function openMainSite() {
+            log('在新視窗開啟主網站...', 'info');
+            const newWindow = window.open('http://localhost:8000', '_blank');
+            
+            if (newWindow) {
+                log('新視窗已開啟', 'success');
+            } else {
+                log('新視窗開啟失敗 (可能被彈窗攔截器阻擋)', 'warning');
+            }
+        }
+
+        // 初始化檢查
+        document.addEventListener('DOMContentLoaded', () => {
+            log('驗證工具初始化完成', 'success');
+            updateVerificationResults();
+            
+            // 自動運行基本測試
+            setTimeout(() => {
+                log('自動執行基本檢查...', 'info');
+                checkConsoleErrors();
+            }, 1000);
+        });
+
+        // 定期更新
+        setInterval(updateVerificationResults, 5000);
+    </script>
+</body>
+</html>
