@@ -1,0 +1,661 @@
+/* 動畫樣式 */
+
+/* 基礎動畫設定 */
+:root {
+    --animation-duration-fast: 0.2s;
+    --animation-duration-normal: 0.3s;
+    --animation-duration-slow: 0.5s;
+    --animation-easing: cubic-bezier(0.4, 0, 0.2, 1);
+    --animation-easing-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+/* 進入動畫 */
+@keyframes fade-in {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slide-in-up {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slide-in-down {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slide-in-left {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slide-in-right {
+    from {
+        opacity: 0;
+        transform: translateX(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes scale-in {
+    from {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes bounce-in {
+    0% {
+        opacity: 0;
+        transform: scale(0.3);
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1.05);
+    }
+    70% {
+        transform: scale(0.9);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* 離開動畫 */
+@keyframes fade-out {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
+
+@keyframes slide-out-up {
+    from {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+}
+
+@keyframes slide-out-down {
+    from {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+}
+
+@keyframes scale-out {
+    from {
+        opacity: 1;
+        transform: scale(1);
+    }
+    to {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+}
+
+/* 循環動畫 */
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
+
+@keyframes shake {
+    0%, 100% {
+        transform: translateX(0);
+    }
+    10%, 30%, 50%, 70%, 90% {
+        transform: translateX(-2px);
+    }
+    20%, 40%, 60%, 80% {
+        transform: translateX(2px);
+    }
+}
+
+@keyframes bounce {
+    0%, 20%, 53%, 80%, 100% {
+        transform: translateY(0);
+    }
+    40%, 43% {
+        transform: translateY(-8px);
+    }
+    70% {
+        transform: translateY(-4px);
+    }
+    90% {
+        transform: translateY(-2px);
+    }
+}
+
+@keyframes rotate {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes swing {
+    20% {
+        transform: rotate(15deg);
+    }
+    40% {
+        transform: rotate(-10deg);
+    }
+    60% {
+        transform: rotate(5deg);
+    }
+    80% {
+        transform: rotate(-5deg);
+    }
+    100% {
+        transform: rotate(0deg);
+    }
+}
+
+@keyframes wobble {
+    0% {
+        transform: translateX(0%);
+    }
+    15% {
+        transform: translateX(-25%) rotate(-5deg);
+    }
+    30% {
+        transform: translateX(20%) rotate(3deg);
+    }
+    45% {
+        transform: translateX(-15%) rotate(-3deg);
+    }
+    60% {
+        transform: translateX(10%) rotate(2deg);
+    }
+    75% {
+        transform: translateX(-5%) rotate(-1deg);
+    }
+    100% {
+        transform: translateX(0%);
+    }
+}
+
+/* 特殊效果動畫 */
+@keyframes glow {
+    0%, 100% {
+        box-shadow: 0 0 5px var(--primary-color);
+    }
+    50% {
+        box-shadow: 0 0 20px var(--primary-color), 0 0 30px var(--primary-color);
+    }
+}
+
+@keyframes gradient-shift {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+@keyframes typing-cursor {
+    0%, 50% {
+        border-color: transparent;
+    }
+    51%, 100% {
+        border-color: var(--primary-color);
+    }
+}
+
+@keyframes progress-fill {
+    from {
+        width: 0%;
+    }
+    to {
+        width: var(--progress-width);
+    }
+}
+
+/* 動畫類別 */
+.fade-in {
+    animation: fade-in var(--animation-duration-normal) var(--animation-easing) forwards;
+}
+
+.slide-in-up {
+    animation: slide-in-up var(--animation-duration-normal) var(--animation-easing) forwards;
+}
+
+.slide-in-down {
+    animation: slide-in-down var(--animation-duration-normal) var(--animation-easing) forwards;
+}
+
+.slide-in-left {
+    animation: slide-in-left var(--animation-duration-normal) var(--animation-easing) forwards;
+}
+
+.slide-in-right {
+    animation: slide-in-right var(--animation-duration-normal) var(--animation-easing) forwards;
+}
+
+.scale-in {
+    animation: scale-in var(--animation-duration-normal) var(--animation-easing) forwards;
+}
+
+.bounce-in {
+    animation: bounce-in var(--animation-duration-slow) var(--animation-easing-bounce) forwards;
+}
+
+.fade-out {
+    animation: fade-out var(--animation-duration-normal) var(--animation-easing) forwards;
+}
+
+.slide-out-up {
+    animation: slide-out-up var(--animation-duration-normal) var(--animation-easing) forwards;
+}
+
+.slide-out-down {
+    animation: slide-out-down var(--animation-duration-normal) var(--animation-easing) forwards;
+}
+
+.scale-out {
+    animation: scale-out var(--animation-duration-normal) var(--animation-easing) forwards;
+}
+
+.pulse {
+    animation: pulse 2s ease-in-out infinite;
+}
+
+.shake {
+    animation: shake 0.5s ease-in-out;
+}
+
+.bounce {
+    animation: bounce 1s ease-in-out;
+}
+
+.rotate {
+    animation: rotate 1s linear infinite;
+}
+
+.swing {
+    animation: swing 1s ease-in-out;
+}
+
+.wobble {
+    animation: wobble 1s ease-in-out;
+}
+
+.glow {
+    animation: glow 2s ease-in-out infinite;
+}
+
+/* 卡牌專用動畫 */
+.card-slide-in {
+    animation: slide-in-up var(--animation-duration-normal) var(--animation-easing) forwards;
+}
+
+.card-appear {
+    animation: scale-in var(--animation-duration-normal) var(--animation-easing) forwards;
+}
+
+.card-bounce {
+    animation: bounce-in var(--animation-duration-slow) var(--animation-easing-bounce) forwards;
+}
+
+.card-selected-animation {
+    animation: scale-in var(--animation-duration-fast) var(--animation-easing) forwards;
+}
+
+.card-error-animation {
+    animation: shake var(--animation-duration-normal) var(--animation-easing);
+}
+
+.card-success-animation {
+    animation: bounce var(--animation-duration-slow) var(--animation-easing);
+}
+
+/* 對話框動畫 */
+.dialogue-appear {
+    animation: slide-in-left var(--animation-duration-normal) var(--animation-easing) forwards;
+}
+
+.dialogue-disappear {
+    animation: slide-out-left var(--animation-duration-normal) var(--animation-easing) forwards;
+}
+
+.dialogue-typing {
+    position: relative;
+}
+
+.dialogue-typing::after {
+    content: '';
+    display: inline-block;
+    width: 2px;
+    height: 1.2em;
+    background: var(--primary-color);
+    margin-left: 2px;
+    animation: typing-cursor 1s ease-in-out infinite;
+}
+
+.title-update {
+    animation: slide-in-down var(--animation-duration-fast) var(--animation-easing) forwards;
+}
+
+/* 按鈕動畫 */
+.btn-appear {
+    animation: scale-in var(--animation-duration-normal) var(--animation-easing) forwards;
+}
+
+.btn-success {
+    animation: bounce var(--animation-duration-slow) var(--animation-easing);
+}
+
+.btn-error {
+    animation: shake var(--animation-duration-normal) var(--animation-easing);
+}
+
+/* 進度條動畫 */
+.progress-bar {
+    position: relative;
+    overflow: hidden;
+}
+
+.progress-fill {
+    transition: width var(--animation-duration-slow) var(--animation-easing);
+}
+
+.progress-complete {
+    animation: glow 2s ease-in-out;
+}
+
+.progress-stage {
+    transition: all var(--animation-duration-normal) var(--animation-easing);
+}
+
+.stage-completed {
+    animation: bounce-in var(--animation-duration-normal) var(--animation-easing-bounce) forwards;
+}
+
+.stage-current {
+    animation: pulse 2s ease-in-out infinite;
+}
+
+/* 思考動畫 */
+.thinking-animation {
+    animation: wobble 2s ease-in-out infinite;
+}
+
+.avatar-excited {
+    animation: bounce 1s ease-in-out;
+}
+
+.avatar-success {
+    animation: scale-in var(--animation-duration-normal) var(--animation-easing) forwards;
+}
+
+.avatar-warning {
+    animation: shake var(--animation-duration-normal) var(--animation-easing);
+}
+
+/* 載入動畫 */
+.loading-spinner {
+    animation: rotate 1s linear infinite;
+}
+
+.loading-dots::after {
+    content: '';
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+/* 載入狀態動畫 */
+.loading-shimmer {
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.1),
+        transparent
+    );
+    background-size: 200% 100%;
+    animation: gradient-shift 1.5s ease-in-out infinite;
+}
+
+/* 錯誤和成功動畫 */
+.error-animation {
+    animation: shake var(--animation-duration-normal) var(--animation-easing);
+}
+
+.success-animation {
+    animation: bounce var(--animation-duration-slow) var(--animation-easing);
+}
+
+.warning-animation {
+    animation: wobble var(--animation-duration-slow) var(--animation-easing);
+}
+
+/* 彈跳效果 */
+.bounce-hover:hover {
+    animation: bounce var(--animation-duration-slow) var(--animation-easing);
+}
+
+/* 延遲動畫 */
+.delay-100 {
+    animation-delay: 0.1s;
+}
+
+.delay-200 {
+    animation-delay: 0.2s;
+}
+
+.delay-300 {
+    animation-delay: 0.3s;
+}
+
+.delay-400 {
+    animation-delay: 0.4s;
+}
+
+.delay-500 {
+    animation-delay: 0.5s;
+}
+
+/* 動畫持續時間變化 */
+.duration-fast {
+    animation-duration: var(--animation-duration-fast) !important;
+}
+
+.duration-normal {
+    animation-duration: var(--animation-duration-normal) !important;
+}
+
+.duration-slow {
+    animation-duration: var(--animation-duration-slow) !important;
+}
+
+/* 動畫緩動變化 */
+.easing-linear {
+    animation-timing-function: linear !important;
+}
+
+.easing-ease-in {
+    animation-timing-function: ease-in !important;
+}
+
+.easing-ease-out {
+    animation-timing-function: ease-out !important;
+}
+
+.easing-bounce {
+    animation-timing-function: var(--animation-easing-bounce) !important;
+}
+
+/* 序列動畫 */
+.sequence-1 {
+    animation-delay: 0.1s;
+}
+
+.sequence-2 {
+    animation-delay: 0.2s;
+}
+
+.sequence-3 {
+    animation-delay: 0.3s;
+}
+
+.sequence-4 {
+    animation-delay: 0.4s;
+}
+
+.sequence-5 {
+    animation-delay: 0.5s;
+}
+
+/* 無限動畫 */
+.infinite {
+    animation-iteration-count: infinite;
+}
+
+/* 動畫暫停 */
+.paused {
+    animation-play-state: paused;
+}
+
+/* 動畫反向 */
+.reverse {
+    animation-direction: reverse;
+}
+
+/* 動畫交替 */
+.alternate {
+    animation-direction: alternate;
+}
+
+/* 響應式動畫 */
+@media (max-width: 768px) {
+    :root {
+        --animation-duration-fast: 0.15s;
+        --animation-duration-normal: 0.25s;
+        --animation-duration-slow: 0.4s;
+    }
+}
+
+/* 無障礙支援 */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+    
+    .loading-spinner {
+        animation: none;
+    }
+    
+    .pulse {
+        animation: none;
+    }
+}
+
+/* 高對比度模式 */
+@media (prefers-contrast: high) {
+    .glow {
+        animation: none;
+        box-shadow: 0 0 2px var(--primary-color);
+    }
+}
+
+/* 深色模式動畫調整 */
+@media (prefers-color-scheme: dark) {
+    .loading-shimmer {
+        background: linear-gradient(
+            90deg,
+            transparent,
+            rgba(255, 255, 255, 0.05),
+            transparent
+        );
+    }
+}
+
+/* 效能優化 */
+.will-change-transform {
+    will-change: transform;
+}
+
+.will-change-opacity {
+    will-change: opacity;
+}
+
+.will-change-auto {
+    will-change: auto;
+}
+
+/* 3D 硬體加速 */
+.hardware-accelerated {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    perspective: 1000px;
+}
+
+/* 動畫組合 */
+.slide-and-fade {
+    animation: 
+        slide-in-up var(--animation-duration-normal) var(--animation-easing) forwards,
+        fade-in var(--animation-duration-normal) var(--animation-easing) forwards;
+}
+
+.scale-and-bounce {
+    animation: 
+        scale-in var(--animation-duration-normal) var(--animation-easing) forwards,
+        bounce var(--animation-duration-slow) var(--animation-easing-bounce) forwards;
+}
+
+.rotate-and-scale {
+    animation: 
+        rotate 1s linear infinite,
+        scale-in var(--animation-duration-normal) var(--animation-easing) forwards;
+}

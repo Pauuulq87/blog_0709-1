@@ -1,0 +1,450 @@
+/* 卡牌樣式 */
+
+/* 卡牌容器 */
+.card-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--spacing-md);
+    padding: var(--spacing-md) 0;
+    margin-bottom: var(--spacing-xl);
+}
+
+/* 基礎卡牌樣式 */
+.card {
+    background: var(--bg-card);
+    border-radius: var(--border-radius);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: var(--spacing-md);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    min-height: 140px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+/* 卡牌懸停效果 */
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--box-shadow-hover);
+    border-color: var(--primary-color);
+}
+
+/* 卡牌焦點效果 */
+.card:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.3);
+    border-color: var(--primary-color);
+}
+
+/* 卡牌標題 */
+.card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--spacing-sm);
+}
+
+.card-icon {
+    font-size: 2rem;
+    margin-right: var(--spacing-sm);
+    flex-shrink: 0;
+}
+
+.card-selected-indicator {
+    color: var(--accent-color);
+    font-size: 1.2rem;
+    font-weight: 600;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+/* 卡牌內容 */
+.card-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.card-title {
+    font-size: var(--font-size-lg);
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: var(--spacing-xs);
+    line-height: 1.3;
+}
+
+.card-description {
+    font-size: var(--font-size-sm);
+    color: var(--text-secondary);
+    line-height: 1.5;
+    flex: 1;
+}
+
+/* 卡牌尾部 */
+.card-footer {
+    margin-top: var(--spacing-sm);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.card-value {
+    font-size: var(--font-size-xs);
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
+/* 卡牌狀態 */
+.card-selected {
+    background: linear-gradient(135deg, 
+        rgba(99, 102, 241, 0.1) 0%, 
+        rgba(139, 92, 246, 0.1) 100%);
+    border-color: var(--primary-color);
+    transform: translateY(-2px);
+}
+
+.card-selected .card-selected-indicator {
+    opacity: 1;
+}
+
+.card-selected .card-title {
+    color: var(--primary-color);
+}
+
+/* 禁用狀態 */
+.card-disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none !important;
+}
+
+.card-disabled:hover {
+    transform: none !important;
+    box-shadow: var(--box-shadow) !important;
+    border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+/* 卡牌類型變化 */
+.card[data-category="project_type"] .card-icon {
+    color: var(--primary-color);
+}
+
+.card[data-category="target_audience"] .card-icon {
+    color: var(--secondary-color);
+}
+
+.card[data-category="purpose"] .card-icon {
+    color: var(--accent-color);
+}
+
+.card[data-category="color_scheme"] .card-icon {
+    color: var(--warning-color);
+}
+
+.card[data-category="layout_style"] .card-icon {
+    color: var(--primary-color);
+}
+
+.card[data-category="visual_style"] .card-icon {
+    color: var(--secondary-color);
+}
+
+.card[data-category="animation_level"] .card-icon {
+    color: var(--accent-color);
+}
+
+.card[data-category="mobile_priority"] .card-icon {
+    color: var(--warning-color);
+}
+
+/* 色彩預覽 */
+.card[data-category="color_scheme"] .card-footer::after {
+    content: '';
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: var(--preview-color, var(--primary-color));
+    border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+/* 多選卡牌 */
+.card-multiple-selection {
+    position: relative;
+}
+
+.card-multiple-selection::before {
+    content: '';
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--text-muted);
+    border-radius: 4px;
+    background: transparent;
+    transition: all 0.2s ease;
+}
+
+.card-multiple-selection.card-selected::before {
+    background: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.card-multiple-selection.card-selected::after {
+    content: '✓';
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    color: white;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+/* 卡牌網格佈局變化 */
+.card-container.single-column {
+    grid-template-columns: 1fr;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.card-container.two-columns {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.card-container.three-columns {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.card-container.four-columns {
+    grid-template-columns: repeat(4, 1fr);
+}
+
+/* 卡牌大小變化 */
+.card.card-small {
+    min-height: 100px;
+    padding: var(--spacing-sm);
+}
+
+.card.card-small .card-icon {
+    font-size: 1.5rem;
+}
+
+.card.card-small .card-title {
+    font-size: var(--font-size-base);
+}
+
+.card.card-large {
+    min-height: 180px;
+    padding: var(--spacing-lg);
+}
+
+.card.card-large .card-icon {
+    font-size: 2.5rem;
+}
+
+.card.card-large .card-title {
+    font-size: var(--font-size-xl);
+}
+
+/* 卡牌載入狀態 */
+.card.card-loading {
+    position: relative;
+    overflow: hidden;
+}
+
+.card.card-loading::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.1),
+        transparent
+    );
+    animation: card-loading 1.5s infinite;
+}
+
+@keyframes card-loading {
+    0% {
+        left: -100%;
+    }
+    100% {
+        left: 100%;
+    }
+}
+
+/* 卡牌錯誤狀態 */
+.card.card-error {
+    border-color: var(--error-color);
+    background: rgba(239, 68, 68, 0.1);
+}
+
+.card.card-error .card-title {
+    color: var(--error-color);
+}
+
+/* 卡牌成功狀態 */
+.card.card-success {
+    border-color: var(--accent-color);
+    background: rgba(16, 185, 129, 0.1);
+}
+
+.card.card-success .card-title {
+    color: var(--accent-color);
+}
+
+/* 響應式設計 */
+@media (max-width: 768px) {
+    .card-container {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-sm);
+    }
+    
+    .card {
+        min-height: 120px;
+        padding: var(--spacing-sm);
+    }
+    
+    .card-icon {
+        font-size: 1.8rem;
+    }
+    
+    .card-title {
+        font-size: var(--font-size-base);
+    }
+    
+    .card-description {
+        font-size: var(--font-size-xs);
+    }
+}
+
+@media (max-width: 480px) {
+    .card-container {
+        margin: 0 -var(--spacing-sm);
+    }
+    
+    .card {
+        border-radius: var(--spacing-xs);
+        margin: 0 var(--spacing-sm);
+    }
+    
+    .card-icon {
+        font-size: 1.5rem;
+    }
+}
+
+/* 高對比度模式 */
+@media (prefers-contrast: high) {
+    .card {
+        border-width: 2px;
+    }
+    
+    .card-selected {
+        border-width: 3px;
+    }
+}
+
+/* 減少動畫模式 */
+@media (prefers-reduced-motion: reduce) {
+    .card {
+        transition: none;
+    }
+    
+    .card:hover {
+        transform: none;
+    }
+    
+    .card-selected {
+        transform: none;
+    }
+}
+
+/* 深色模式支援 */
+@media (prefers-color-scheme: dark) {
+    .card {
+        background: rgba(255, 255, 255, 0.05);
+        border-color: rgba(255, 255, 255, 0.15);
+    }
+    
+    .card:hover {
+        border-color: var(--primary-color);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+    }
+    
+    .card-selected {
+        background: linear-gradient(135deg, 
+            rgba(99, 102, 241, 0.15) 0%, 
+            rgba(139, 92, 246, 0.15) 100%);
+    }
+}
+
+/* 卡牌排序和篩選 */
+.card-container.sorting .card {
+    transition: all 0.3s ease;
+}
+
+.card-container.filtering .card {
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.card-container.filtering .card.card-hidden {
+    opacity: 0;
+    transform: scale(0.8);
+    pointer-events: none;
+}
+
+/* 卡牌拖拽支援 */
+.card.card-draggable {
+    cursor: grab;
+}
+
+.card.card-draggable:active {
+    cursor: grabbing;
+    transform: rotate(3deg) scale(1.05);
+    z-index: 1000;
+}
+
+.card.card-drag-over {
+    border-color: var(--warning-color);
+    background: rgba(245, 158, 11, 0.1);
+}
+
+/* 卡牌工具提示 */
+.card[data-tooltip] {
+    position: relative;
+}
+
+.card[data-tooltip]:hover::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.9);
+    color: white;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-radius: var(--spacing-xs);
+    font-size: var(--font-size-xs);
+    white-space: nowrap;
+    z-index: 1000;
+    opacity: 0;
+    animation: tooltip-fade-in 0.2s ease forwards;
+}
+
+@keyframes tooltip-fade-in {
+    from {
+        opacity: 0;
+        transform: translateX(-50%) translateY(4px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+}
