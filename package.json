@@ -6,7 +6,10 @@
   "scripts": {
     "start": "python -m http.server 8000",
     "serve": "npx serve .",
-    "dev": "python -m http.server 8000"
+    "dev": "python -m http.server 8000",
+    "test": "node puppeteer-test.js",
+    "test:puppeteer": "node puppeteer-test.js",
+    "install-puppeteer": "npm install puppeteer"
   },
   "keywords": [
     "requirement-collection",
@@ -17,6 +20,7 @@
   ],
   "author": "Claude Code",
   "license": "MIT",
-  "devDependencies": {},
-  "dependencies": {}
+  "devDependencies": {
+    "puppeteer": "^21.11.0"
+  }
 }

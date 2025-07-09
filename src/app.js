@@ -868,8 +868,51 @@ class VibeCodingAcademy {
 
 // 當 DOM 準備完成時啟動應用程式
 document.addEventListener('DOMContentLoaded', () => {
-    window.app = new VibeCodingAcademy();
+    console.log('🚀 DOMContentLoaded 事件觸發');
+    
+    try {
+        console.log('📍 開始創建 VibeCodingAcademy 實例...');
+        window.app = new window.VibeCodingAcademy();
+        console.log('✅ VibeCodingAcademy 實例創建成功');
+    } catch (error) {
+        console.error('❌ VibeCodingAcademy 實例創建失敗:', error);
+        console.error('錯誤堆疊:', error.stack);
+        
+        // 顯示用戶友好的錯誤訊息
+        const loadingScreen = document.getElementById('loading-screen');
+        if (loadingScreen) {
+            loadingScreen.innerHTML = `
+                <div style="text-align: center; color: #ef4444;">
+                    <h3>🚨 初始化失敗</h3>
+                    <p>錯誤: ${error.message}</p>
+                    <button onclick="location.reload()" style="margin-top: 20px; padding: 10px 20px; background: #3b82f6; color: white; border: none; border-radius: 8px; cursor: pointer;">
+                        重新載入
+                    </button>
+                </div>
+            `;
+        }
+    }
 });
+
+// 確保在 DOM 準備之前就有基本的錯誤處理
+console.log('📄 app.js 腳本載入完成');
+
+// 如果 DOMContentLoaded 已經觸發過，立即執行
+if (document.readyState === 'loading') {
+    console.log('📊 DOM 狀態: loading - 等待 DOMContentLoaded');
+} else {
+    console.log('📊 DOM 狀態: ' + document.readyState + ' - 立即執行初始化');
+    setTimeout(() => {
+        if (!window.app) {
+            console.log('⚡ 手動觸發應用程式初始化...');
+            try {
+                window.app = new window.VibeCodingAcademy();
+            } catch (error) {
+                console.error('❌ 手動初始化也失敗:', error);
+            }
+        }
+    }, 100);
+}
 
 // 導出到全域
 window.VibeCodingAcademy = VibeCodingAcademy;

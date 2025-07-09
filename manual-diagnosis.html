@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>手動診斷工具 - Vibe Coding Academy</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            margin: 20px;
+            background: #1a1a2e;
+            color: #eee;
+        }
+        .diagnostic-panel {
+            background: #16213e;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border: 1px solid #0f3460;
+        }
+        .status {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .status.success { background: #28a745; color: white; }
+        .status.error { background: #dc3545; color: white; }
+        .status.warning { background: #ffc107; color: black; }
+        .diagnostic-item {
+            margin: 10px 0;
+            padding: 8px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 4px;
+        }
+        .test-button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .test-button:hover {
+            background: #0056b3;
+        }
+        #console-output {
+            background: #000;
+            color: #0f0;
+            font-family: 'Courier New', monospace;
+            padding: 10px;
+            border-radius: 4px;
+            height: 200px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔧 Vibe Coding Academy 診斷工具</h1>
+    
+    <div class="diagnostic-panel">
+        <h2>📊 即時診斷結果</h2>
+        <div id="diagnostic-results">正在檢查...</div>
+        
+        <h3>🧪 手動測試</h3>
+        <button class="test-button" onclick="testJavaScriptClasses()">測試 JavaScript 類別</button>
+        <button class="test-button" onclick="testDOMElements()">測試 DOM 元素</button>
+        <button class="test-button" onclick="testAppInitialization()">測試 App 初始化</button>
+        <button class="test-button" onclick="forceAppStart()">強制啟動應用程式</button>
+        <button class="test-button" onclick="clearConsole()">清除控制台</button>
+    </div>
+
+    <div class="diagnostic-panel">
+        <h2>📝 控制台輸出</h2>
+        <div id="console-output"></div>
+    </div>
+
+    <div class="diagnostic-panel">
+        <h2>🎯 快速修復動作</h2>
+        <button class="test-button" onclick="fixLoadingScreen()">修復 Loading Screen</button>
+        <button class="test-button" onclick="showGameContainer()">顯示遊戲容器</button>
+        <button class="test-button" onclick="initializeManually()">手動初始化</button>
+    </div>
+
+    <script>
+        let consoleOutput = document.getElementById('console-output');
+        let diagnosticResults = document.getElementById('diagnostic-results');
+
+        function log(message, type = 'info') {
+            const timestamp = new Date().toLocaleTimeString();
+            const prefix = {
+                'error': '❌',
+                'warning': '⚠️',
+                'success': '✅',
+                'info': 'ℹ️'
+            }[type] || 'ℹ️';
+            
+            consoleOutput.textContent += `[${timestamp}] ${prefix} ${message}\n`;
+            consoleOutput.scrollTop = consoleOutput.scrollHeight;
+            
+            console.log(`${prefix} ${message}`);
+        }
+
+        function clearConsole() {
+            consoleOutput.textContent = '';
+        }
+
+        function updateDiagnosticResults() {
+            let html = '';
+            
+            // 檢查 JavaScript 類別
+            const classes = [
+                'VibeCodingAcademy', 'DialogueBox', 'ProgressBar', 'CardManager',
+                'ProjectTypeCollector', 'DesignStyleCollector', 'FeatureCollector',
+                'TechStackCollector', 'DeploymentCollector',
+                'RequirementParser', 'OutputGenerator', 'ValidationHelper'
+            ];
+            
+            html += '<h4>JavaScript 類別檢查:</h4>';
+            classes.forEach(className => {
+                const exists = typeof window[className] === 'function';
+                const status = exists ? 'success' : 'error';
+                const text = exists ? 'OK' : 'MISSING';
+                html += `<div class="diagnostic-item">${className}: <span class="status ${status}">${text}</span></div>`;
+            });
+
+            // 檢查 DOM 元素
+            const elements = [
+                ['#loading-screen', 'Loading Screen'],
+                ['#game-container', 'Game Container'],
+                ['#dialogue-box', 'Dialogue Box'],
+                ['.progress-bar-container', 'Progress Bar'],
+                ['#card-container', 'Card Container'],
+                ['#start-btn', 'Start Button']
+            ];
+
+            html += '<h4>DOM 元素檢查:</h4>';
+            elements.forEach(([selector, name]) => {
+                const element = document.querySelector(selector);
+                const exists = !!element;
+                const visible = element && !element.classList.contains('hidden') && 
+                               getComputedStyle(element).display !== 'none';
+                
+                let status, text;
+                if (!exists) {
+                    status = 'error';
+                    text = 'NOT FOUND';
+                } else if (visible) {
+                    status = 'success';
+                    text = 'VISIBLE';
+                } else {
+                    status = 'warning';
+                    text = 'HIDDEN';
+                }
+                
+                html += `<div class="diagnostic-item">${name}: <span class="status ${status}">${text}</span></div>`;
+            });
+
+            // 檢查 App 狀態
+            html += '<h4>App 狀態檢查:</h4>';
+            if (window.app) {
+                const appStatus = window.app.isInitialized ? 'success' : 'warning';
+                const appText = window.app.isInitialized ? 'INITIALIZED' : 'NOT INITIALIZED';
+                html += `<div class="diagnostic-item">App Instance: <span class="status ${appStatus}">${appText}</span></div>`;
+                html += `<div class="diagnostic-item">Current Stage: <span class="status info">${window.app.currentStage || 0}</span></div>`;
+            } else {
+                html += `<div class="diagnostic-item">App Instance: <span class="status error">NOT FOUND</span></div>`;
+            }
+
+            diagnosticResults.innerHTML = html;
+        }
+
+        function testJavaScriptClasses() {
+            log('開始測試 JavaScript 類別...', 'info');
+            
+            const classes = [
+                'VibeCodingAcademy', 'DialogueBox', 'ProgressBar', 'CardManager',
+                'ProjectTypeCollector', 'DesignStyleCollector', 'FeatureCollector',
+                'TechStackCollector', 'DeploymentCollector',
+                'RequirementParser', 'OutputGenerator', 'ValidationHelper'
+            ];
+            
+            let successCount = 0;
+            classes.forEach(className => {
+                if (typeof window[className] === 'function') {
+                    log(`✓ ${className} 類別存在`, 'success');
+                    successCount++;
+                } else {
+                    log(`✗ ${className} 類別缺失`, 'error');
+                }
+            });
+            
+            log(`類別檢查完成: ${successCount}/${classes.length} 成功載入`, 'info');
+            updateDiagnosticResults();
+        }
+
+        function testDOMElements() {
+            log('開始測試 DOM 元素...', 'info');
+            
+            const elements = [
+                ['#loading-screen', 'Loading Screen'],
+                ['#game-container', 'Game Container'],
+                ['#dialogue-box', 'Dialogue Box'],
+                ['.progress-bar-container', 'Progress Bar'],
+                ['#card-container', 'Card Container'],
+                ['#start-btn', 'Start Button']
+            ];
+
+            elements.forEach(([selector, name]) => {
+                const element = document.querySelector(selector);
+                if (element) {
+                    const visible = !element.classList.contains('hidden') && 
+                                   getComputedStyle(element).display !== 'none';
+                    log(`✓ ${name} 存在 (${visible ? '可見' : '隱藏'})`, 'success');
+                } else {
+                    log(`✗ ${name} 不存在`, 'error');
+                }
+            });
+            
+            updateDiagnosticResults();
+        }
+
+        function testAppInitialization() {
+            log('測試 App 初始化狀態...', 'info');
+            
+            if (window.app) {
+                log(`✓ App 實例存在`, 'success');
+                log(`  - 初始化狀態: ${window.app.isInitialized}`, 'info');
+                log(`  - 當前階段: ${window.app.currentStage}`, 'info');
+                log(`  - 收集器: ${window.app.collectors ? '已載入' : '未載入'}`, 'info');
+                
+                if (window.app.dialogueBox) {
+                    log(`  - 對話框組件: 已載入`, 'success');
+                } else {
+                    log(`  - 對話框組件: 未載入`, 'error');
+                }
+                
+                if (window.app.progressBar) {
+                    log(`  - 進度條組件: 已載入`, 'success');
+                } else {
+                    log(`  - 進度條組件: 未載入`, 'error');
+                }
+            } else {
+                log(`✗ App 實例不存在`, 'error');
+                log(`嘗試手動創建 App 實例...`, 'info');
+                
+                try {
+                    if (typeof window.VibeCodingAcademy === 'function') {
+                        window.app = new window.VibeCodingAcademy();
+                        log(`✓ 手動創建 App 實例成功`, 'success');
+                    } else {
+                        log(`✗ VibeCodingAcademy 類別不存在`, 'error');
+                    }
+                } catch (error) {
+                    log(`✗ 手動創建失敗: ${error.message}`, 'error');
+                }
+            }
+            
+            updateDiagnosticResults();
+        }
+
+        function forceAppStart() {
+            log('嘗試強制啟動應用程式...', 'info');
+            
+            if (window.app && typeof window.app.startApplication === 'function') {
+                try {
+                    window.app.startApplication();
+                    log('✓ App 啟動指令已發送', 'success');
+                } catch (error) {
+                    log(`✗ App 啟動失敗: ${error.message}`, 'error');
+                }
+            } else {
+                log('✗ App 實例或啟動方法不存在', 'error');
+            }
+            
+            updateDiagnosticResults();
+        }
+
+        function fixLoadingScreen() {
+            log('嘗試修復 Loading Screen...', 'info');
+            
+            const loadingScreen = document.querySelector('#loading-screen');
+            if (loadingScreen) {
+                loadingScreen.classList.remove('hidden');
+                loadingScreen.style.display = 'flex';
+                log('✓ Loading Screen 已顯示', 'success');
+            } else {
+                log('✗ Loading Screen 元素不存在', 'error');
+            }
+            
+            updateDiagnosticResults();
+        }
+
+        function showGameContainer() {
+            log('嘗試顯示遊戲容器...', 'info');
+            
+            const gameContainer = document.querySelector('#game-container');
+            const loadingScreen = document.querySelector('#loading-screen');
+            
+            if (gameContainer) {
+                gameContainer.classList.remove('hidden');
+                gameContainer.style.display = 'block';
+                log('✓ 遊戲容器已顯示', 'success');
+                
+                if (loadingScreen) {
+                    loadingScreen.classList.add('hidden');
+                    log('✓ Loading Screen 已隱藏', 'success');
+                }
+            } else {
+                log('✗ 遊戲容器元素不存在', 'error');
+            }
+            
+            updateDiagnosticResults();
+        }
+
+        function initializeManually() {
+            log('嘗試手動初始化應用程式...', 'info');
+            
+            try {
+                // 1. 確保 App 實例存在
+                if (!window.app && typeof window.VibeCodingAcademy === 'function') {
+                    window.app = new window.VibeCodingAcademy();
+                    log('✓ App 實例已創建', 'success');
+                }
+                
+                // 2. 直接調用初始化
+                if (window.app && typeof window.app.init === 'function') {
+                    window.app.init();
+                    log('✓ 初始化方法已調用', 'success');
+                }
+                
+                // 3. 顯示介紹
+                if (window.app && typeof window.app.showIntroduction === 'function') {
+                    window.app.showIntroduction();
+                    log('✓ 介紹已顯示', 'success');
+                }
+                
+            } catch (error) {
+                log(`✗ 手動初始化失敗: ${error.message}`, 'error');
+            }
+            
+            updateDiagnosticResults();
+        }
+
+        // 初始診斷
+        document.addEventListener('DOMContentLoaded', () => {
+            log('診斷工具已載入', 'success');
+            updateDiagnosticResults();
+            
+            // 每秒更新一次診斷結果
+            setInterval(updateDiagnosticResults, 1000);
+        });
+
+        // 捕獲錯誤
+        window.addEventListener('error', (e) => {
+            log(`JavaScript 錯誤: ${e.message} (${e.filename}:${e.lineno})`, 'error');
+        });
+    </script>
+</body>
+</html>
