@@ -36,9 +36,22 @@ class ProgressBar {
         if (this.container.querySelector('.progress-bar')) {
             this.progressBar = this.container.querySelector('.progress-bar');
             this.progressText = this.container.querySelector('.progress-text');
+            this.progressFill = this.container.querySelector('.progress-fill');
+            this.progressPercentage = this.container.querySelector('.progress-percentage');
+            this.stages = this.container.querySelectorAll('.progress-stage');
+            
+            // 如果沒有完整結構，重新創建
+            if (!this.progressFill || !this.progressPercentage) {
+                this.createFullStructure();
+            }
             return;
         }
-
+        
+        this.createFullStructure();
+    }
+    
+    // 創建完整的進度條結構
+    createFullStructure() {
         // 創建新的進度條結構
         this.container.innerHTML = `
             <div class="progress-bar-wrapper">

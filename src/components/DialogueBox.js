@@ -36,6 +36,18 @@ class DialogueBox {
             this.titleElement = this.container.querySelector('.dialogue-title');
             this.textElement = this.container.querySelector('.dialogue-text');
             this.avatarElement = this.container.querySelector('.avatar-img');
+            this.actionButton = this.container.querySelector('.dialogue-action-btn');
+            
+            // 如果沒有action按鈕，創建一個
+            if (!this.actionButton) {
+                const actionsDiv = document.createElement('div');
+                actionsDiv.className = 'dialogue-actions';
+                this.actionButton = document.createElement('button');
+                this.actionButton.className = 'dialogue-action-btn';
+                this.actionButton.style.display = 'none';
+                actionsDiv.appendChild(this.actionButton);
+                this.container.querySelector('.dialogue-content').appendChild(actionsDiv);
+            }
             return;
         }
 

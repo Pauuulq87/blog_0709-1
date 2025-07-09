@@ -75,19 +75,52 @@ class VibeCodingAcademy {
             
         } catch (error) {
             console.error('應用程式初始化失敗:', error);
+            console.error('錯誤詳情:', error.stack);
+            
+            // 顯示詳細錯誤信息在loading screen
+            const loadingScreen = document.getElementById('loading-screen');
+            if (loadingScreen) {
+                loadingScreen.innerHTML = `
+                    <div class="error-message">
+                        <h3>🚨 初始化失敗</h3>
+                        <p>錯誤原因: ${error.message}</p>
+                        <button onclick="location.reload()" class="btn btn-primary">重新整理頁面</button>
+                    </div>
+                `;
+            }
+            
             this.handleError('初始化失敗，請重新整理頁面');
         }
     }
 
     // 初始化組件
     async initializeComponents() {
+        console.log('開始初始化組件...');
+        
+        // 檢查必要的DOM元素是否存在
+        const requiredElements = [
+            '#dialogue-box',
+            '.progress-bar-container', 
+            '#card-container'
+        ];
+        
+        for (const selector of requiredElements) {
+            const element = document.querySelector(selector);
+            if (!element) {
+                throw new Error(`缺少必要的DOM元素: ${selector}`);
+            }
+        }
+        
         // 初始化對話框
+        console.log('初始化對話框...');
         this.dialogueBox = new DialogueBox('#dialogue-box');
         
         // 初始化進度條
+        console.log('初始化進度條...');
         this.progressBar = new ProgressBar('.progress-bar-container');
         
         // 初始化卡牌管理器
+        console.log('初始化卡牌管理器...');
         this.cardManager = new CardManager('#card-container');
         
         // 設定進度條階段名稱
@@ -95,23 +128,60 @@ class VibeCodingAcademy {
             '專案願景', '設計風格', '功能需求', '技術架構', '規格確認'
         ]);
         
+        console.log('組件初始化完成');
         await this.sleep(100); // 確保 DOM 準備完成
     }
 
     // 初始化收集器
     initializeCollectors() {
+        console.log('開始初始化收集器...');
+        
+        // 檢查收集器類別是否存在
+        const collectorClasses = {
+            ProjectTypeCollector,
+            DesignStyleCollector, 
+            FeatureCollector,
+            TechStackCollector,
+            DeploymentCollector
+        };
+        
+        for (const [name, CollectorClass] of Object.entries(collectorClasses)) {
+            if (typeof CollectorClass !== 'function') {
+                throw new Error(`收集器類別未定義: ${name}`);
+            }
+        }
+        
         this.collectors.projectType = new ProjectTypeCollector();
         this.collectors.designStyle = new DesignStyleCollector();
         this.collectors.feature = new FeatureCollector();
         this.collectors.techStack = new TechStackCollector();
         this.collectors.deployment = new DeploymentCollector();
+        
+        console.log('收集器初始化完成');
     }
 
     // 初始化工具
     initializeTools() {
+        console.log('開始初始化工具...');
+        
+        // 檢查工具類別是否存在
+        const toolClasses = {
+            RequirementParser,
+            OutputGenerator,
+            ValidationHelper
+        };
+        
+        for (const [name, ToolClass] of Object.entries(toolClasses)) {
+            if (typeof ToolClass !== 'function') {
+                throw new Error(`工具類別未定義: ${name}`);
+            }
+        }
+        
         this.requirementParser = new RequirementParser();
         this.outputGenerator = new OutputGenerator();
         this.validationHelper = new ValidationHelper();
+        
+        console.log('工具初始化完成');
     }
 
     // 綁定事件
