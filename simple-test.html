@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Test</title>
+</head>
+<body>
+    <h1>簡單測試</h1>
+    <div id="output"></div>
+
+    <script>
+        console.log('Script started');
+        document.getElementById('output').innerHTML = 'JavaScript 正在運行';
+        
+        // 測試 DOMContentLoaded
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('DOMContentLoaded fired');
+            document.getElementById('output').innerHTML += '<br>DOMContentLoaded 事件觸發';
+        });
+        
+        // 測試基本VibeCodingAcademy類別創建
+        class TestApp {
+            constructor() {
+                console.log('TestApp constructor called');
+                document.getElementById('output').innerHTML += '<br>TestApp 建構子執行';
+            }
+        }
+        
+        // 直接創建實例
+        try {
+            const testApp = new TestApp();
+            document.getElementById('output').innerHTML += '<br>TestApp 實例創建成功';
+        } catch (error) {
+            console.error('Error creating TestApp:', error);
+            document.getElementById('output').innerHTML += '<br>TestApp 實例創建失敗: ' + error.message;
+        }
+    </script>
+</body>
+</html>

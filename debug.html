@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug Test</title>
+</head>
+<body>
+    <h1>JavaScript 除錯測試</h1>
+    <div id="debug-output"></div>
+
+    <script>
+        const output = document.getElementById('debug-output');
+        
+        function log(message) {
+            output.innerHTML += '<p>' + message + '</p>';
+            console.log(message);
+        }
+        
+        log('開始載入測試...');
+        
+        // 測試每個檔案載入
+        const scripts = [
+            'src/components/Card.js',
+            'src/components/DialogueBox.js', 
+            'src/components/ProgressBar.js',
+            'src/utils/requirementParser.js',
+            'src/utils/outputGenerator.js',
+            'src/utils/validationHelper.js',
+            'src/collectors/ProjectTypeCollector.js',
+            'src/collectors/DesignStyleCollector.js',
+            'src/collectors/FeatureCollector.js',
+            'src/collectors/TechStackCollector.js',
+            'src/collectors/DeploymentCollector.js'
+        ];
+        
+        let loadedCount = 0;
+        
+        scripts.forEach((src, index) => {
+            const script = document.createElement('script');
+            script.src = src;
+            script.onload = () => {
+                loadedCount++;
+                log(`✅ 載入成功: ${src}`);
+                
+                if (loadedCount === scripts.length) {
+                    log('所有腳本載入完成，開始測試類別...');
+                    testClasses();
+                }
+            };
+            script.onerror = (error) => {
+                log(`❌ 載入失敗: ${src} - ${error.message || 'Unknown error'}`);
+            };
+            document.head.appendChild(script);
+        });
+        
+        function testClasses() {
+            const classes = [
+                'Card', 'CardManager',
+                'DialogueBox', 'DialogueManager', 
+                'ProgressBar', 'ProgressManager',
+                'RequirementParser',
+                'OutputGenerator',
+                'ValidationHelper',
+                'ProjectTypeCollector',
+                'DesignStyleCollector',
+                'FeatureCollector', 
+                'TechStackCollector',
+                'DeploymentCollector'
+            ];
+            
+            classes.forEach(className => {
+                if (typeof window[className] === 'function') {
+                    log(`✅ 類別存在: ${className}`);
+                } else {
+                    log(`❌ 類別缺失: ${className}`);
+                }
+            });
+        }
+    </script>
+</body>
+</html>

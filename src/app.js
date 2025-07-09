@@ -113,15 +113,15 @@ class VibeCodingAcademy {
         
         // 初始化對話框
         console.log('初始化對話框...');
-        this.dialogueBox = new DialogueBox('#dialogue-box');
+        this.dialogueBox = new window.DialogueBox('#dialogue-box');
         
         // 初始化進度條
         console.log('初始化進度條...');
-        this.progressBar = new ProgressBar('.progress-bar-container');
+        this.progressBar = new window.ProgressBar('.progress-bar-container');
         
         // 初始化卡牌管理器
         console.log('初始化卡牌管理器...');
-        this.cardManager = new CardManager('#card-container');
+        this.cardManager = new window.CardManager('#card-container');
         
         // 設定進度條階段名稱
         this.progressBar.setStageNames([
@@ -137,25 +137,25 @@ class VibeCodingAcademy {
         console.log('開始初始化收集器...');
         
         // 檢查收集器類別是否存在
-        const collectorClasses = {
-            ProjectTypeCollector,
-            DesignStyleCollector, 
-            FeatureCollector,
-            TechStackCollector,
-            DeploymentCollector
-        };
+        const collectorClasses = [
+            'ProjectTypeCollector',
+            'DesignStyleCollector', 
+            'FeatureCollector',
+            'TechStackCollector',
+            'DeploymentCollector'
+        ];
         
-        for (const [name, CollectorClass] of Object.entries(collectorClasses)) {
-            if (typeof CollectorClass !== 'function') {
-                throw new Error(`收集器類別未定義: ${name}`);
+        for (const className of collectorClasses) {
+            if (typeof window[className] !== 'function') {
+                throw new Error(`收集器類別未定義: ${className}`);
             }
         }
         
-        this.collectors.projectType = new ProjectTypeCollector();
-        this.collectors.designStyle = new DesignStyleCollector();
-        this.collectors.feature = new FeatureCollector();
-        this.collectors.techStack = new TechStackCollector();
-        this.collectors.deployment = new DeploymentCollector();
+        this.collectors.projectType = new window.ProjectTypeCollector();
+        this.collectors.designStyle = new window.DesignStyleCollector();
+        this.collectors.feature = new window.FeatureCollector();
+        this.collectors.techStack = new window.TechStackCollector();
+        this.collectors.deployment = new window.DeploymentCollector();
         
         console.log('收集器初始化完成');
     }
@@ -165,21 +165,21 @@ class VibeCodingAcademy {
         console.log('開始初始化工具...');
         
         // 檢查工具類別是否存在
-        const toolClasses = {
-            RequirementParser,
-            OutputGenerator,
-            ValidationHelper
-        };
+        const toolClasses = [
+            'RequirementParser',
+            'OutputGenerator',
+            'ValidationHelper'
+        ];
         
-        for (const [name, ToolClass] of Object.entries(toolClasses)) {
-            if (typeof ToolClass !== 'function') {
-                throw new Error(`工具類別未定義: ${name}`);
+        for (const className of toolClasses) {
+            if (typeof window[className] !== 'function') {
+                throw new Error(`工具類別未定義: ${className}`);
             }
         }
         
-        this.requirementParser = new RequirementParser();
-        this.outputGenerator = new OutputGenerator();
-        this.validationHelper = new ValidationHelper();
+        this.requirementParser = new window.RequirementParser();
+        this.outputGenerator = new window.OutputGenerator();
+        this.validationHelper = new window.ValidationHelper();
         
         console.log('工具初始化完成');
     }
