@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>逐步載入測試 - Vibe Coding Academy</title>
+    <link rel="stylesheet" href="src/styles/global.css">
+    <style>
+        .debug-panel {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            width: 300px;
+            max-height: 80vh;
+            background: rgba(0,0,0,0.9);
+            color: #0f0;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 11px;
+            z-index: 9999;
+            overflow-y: auto;
+        }
+        .step {
+            margin: 8px 0;
+            padding: 5px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 3px;
+            border-left: 3px solid #555;
+        }
+        .step.success { border-left-color: #0f0; color: #0f0; }
+        .step.error { border-left-color: #f00; color: #f00; }
+        .step.warning { border-left-color: #ff0; color: #ff0; }
+        .step.info { border-left-color: #0af; color: #0af; }
+        .load-button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            margin: 2px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 10px;
+        }
+        .load-button:hover { background: #0056b3; }
+        .load-button:disabled { background: #666; cursor: not-allowed; }
+    </style>
+</head>
+<body>
+    <!-- 除錯面板 -->
+    <div class="debug-panel">
+        <h4>🔧 逐步載入測試</h4>
+        <div>
+            <button class="load-button" onclick="loadComponents()" id="load-components">載入基礎組件</button>
+            <button class="load-button" onclick="loadUtils()" id="load-utils" disabled>載入工具類別</button>
+            <button class="load-button" onclick="loadCollectors()" id="load-collectors" disabled>載入收集器</button>
+            <button class="load-button" onclick="initializeApp()" id="init-app" disabled>初始化應用</button>
+            <button class="load-button" onclick="clearLog()">清除日誌</button>
+        </div>
+        <div id="log-output">準備開始測試...</div>
+    </div>
+
+    <!-- 簡化的HTML結構 -->
+    <div id="app" class="app-container">
+        <header class="app-header">
+            <h1 class="app-title">🎮 Vibe Coding Academy</h1>
+            <p class="app-subtitle">逐步載入測試</p>
+        </header>
+
+        <main class="main-content">
+            <div id="loading-screen" class="loading-screen" style="display: flex;">
+                <div class="loading-spinner"></div>
+                <p id="loading-text">等待開始測試...</p>
+            </div>
+
+            <div id="test-result" class="hidden">
+                <h3>🎉 測試完成！</h3>
+                <p>所有組件已成功載入並初始化。</p>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        let loadedScripts = [];
+        let testStep = 0;
+
+        // 日誌函數
+        function log(message, type = 'info') {
+            const output = document.getElementById('log-output');
+            const timestamp = new Date().toLocaleTimeString();
+            const logEntry = document.createElement('div');
+            logEntry.className = `step ${type}`;
+            logEntry.innerHTML = `[${timestamp}] ${message}`;
+            output.appendChild(logEntry);
+            
+            // 自動滾動到底部
+            output.scrollTop = output.scrollHeight;
+            
+            console.log(`[STEP TEST] ${message}`);
+        }
+
+        function clearLog() {
+            document.getElementById('log-output').innerHTML = '日誌已清除...';
+        }
+
+        // 動態載入腳本函數
+        function loadScript(src, callback) {
+            return new Promise((resolve, reject) => {
+                if (loadedScripts.includes(src)) {
+                    log(`⚠️ 腳本已載入: ${src}`, 'warning');
+                    resolve();
+                    return;
+                }
+
+                const script = document.createElement('script');
+                script.src = src;
+                
+                script.onload = () => {
+                    loadedScripts.push(src);
+                    log(`✅ 載入成功: ${src}`, 'success');
+                    resolve();
+                };
+                
+                script.onerror = (error) => {
+                    log(`❌ 載入失敗: ${src}`, 'error');
+                    reject(new Error(`Failed to load ${src}`));
+                };
+                
+                document.head.appendChild(script);
+            });
+        }
+
+        // 檢查類別是否存在
+        function checkClass(className) {
+            const exists = typeof window[className] === 'function';
+            log(`檢查類別 ${className}: ${exists ? '✅ 存在' : '❌ 不存在'}`, 
+                exists ? 'success' : 'error');
+            return exists;
+        }
+
+        // 第一步：載入基礎組件
+        async function loadComponents() {
+            log('🚀 開始載入基礎組件...', 'info');
+            
+            const components = [
+                'src/components/Card.js',
+                'src/components/DialogueBox.js', 
+                'src/components/ProgressBar.js'
+            ];
+
+            try {
+                for (const component of components) {
+                    await loadScript(component);
+                    // 稍微延遲以便觀察
+                    await new Promise(resolve => setTimeout(resolve, 100));
+                }
+
+                // 檢查組件類別
+                const componentClasses = ['Card', 'CardManager', 'DialogueBox', 'DialogueManager', 'ProgressBar', 'ProgressManager'];
+                let loadedCount = 0;
+                
+                componentClasses.forEach(className => {
+                    if (checkClass(className)) {
+                        loadedCount++;
+                    }
+                });
+
+                log(`基礎組件載入完成: ${loadedCount}/${componentClasses.length}`, 
+                    loadedCount === componentClasses.length ? 'success' : 'warning');
+
+                // 啟用下一個按鈕
+                document.getElementById('load-components').disabled = true;
+                document.getElementById('load-utils').disabled = false;
+                
+            } catch (error) {
+                log(`❌ 基礎組件載入失敗: ${error.message}`, 'error');
+            }
+        }
+
+        // 第二步：載入工具類別
+        async function loadUtils() {
+            log('🔧 開始載入工具類別...', 'info');
+            
+            const utils = [
+                'src/utils/requirementParser.js',
+                'src/utils/outputGenerator.js',
+                'src/utils/validationHelper.js'
+            ];
+
+            try {
+                for (const util of utils) {
+                    await loadScript(util);
+                    await new Promise(resolve => setTimeout(resolve, 100));
+                }
+
+                // 檢查工具類別
+                const utilClasses = ['RequirementParser', 'OutputGenerator', 'ValidationHelper'];
+                let loadedCount = 0;
+                
+                utilClasses.forEach(className => {
+                    if (checkClass(className)) {
+                        loadedCount++;
+                    }
+                });
+
+                log(`工具類別載入完成: ${loadedCount}/${utilClasses.length}`, 
+                    loadedCount === utilClasses.length ? 'success' : 'warning');
+
+                // 啟用下一個按鈕
+                document.getElementById('load-utils').disabled = true;
+                document.getElementById('load-collectors').disabled = false;
+                
+            } catch (error) {
+                log(`❌ 工具類別載入失敗: ${error.message}`, 'error');
+            }
+        }
+
+        // 第三步：載入收集器
+        async function loadCollectors() {
+            log('📊 開始載入收集器...', 'info');
+            
+            const collectors = [
+                'src/collectors/ProjectTypeCollector.js',
+                'src/collectors/DesignStyleCollector.js',
+                'src/collectors/FeatureCollector.js',
+                'src/collectors/TechStackCollector.js',
+                'src/collectors/DeploymentCollector.js'
+            ];
+
+            try {
+                for (const collector of collectors) {
+                    await loadScript(collector);
+                    await new Promise(resolve => setTimeout(resolve, 100));
+                }
+
+                // 檢查收集器類別
+                const collectorClasses = [
+                    'ProjectTypeCollector', 'DesignStyleCollector', 'FeatureCollector',
+                    'TechStackCollector', 'DeploymentCollector'
+                ];
+                let loadedCount = 0;
+                
+                collectorClasses.forEach(className => {
+                    if (checkClass(className)) {
+                        loadedCount++;
+                    }
+                });
+
+                log(`收集器載入完成: ${loadedCount}/${collectorClasses.length}`, 
+                    loadedCount === collectorClasses.length ? 'success' : 'warning');
+
+                // 啟用下一個按鈕
+                document.getElementById('load-collectors').disabled = true;
+                document.getElementById('init-app').disabled = false;
+                
+            } catch (error) {
+                log(`❌ 收集器載入失敗: ${error.message}`, 'error');
+            }
+        }
+
+        // 第四步：初始化應用
+        async function initializeApp() {
+            log('🎮 開始初始化應用...', 'info');
+            
+            try {
+                // 載入主應用
+                await loadScript('src/app.js');
+                
+                // 檢查VibeCodingAcademy類別
+                if (checkClass('VibeCodingAcademy')) {
+                    
+                    // 嘗試創建實例
+                    log('🏗️ 嘗試創建應用實例...', 'info');
+                    
+                    try {
+                        window.testApp = new window.VibeCodingAcademy();
+                        log('✅ 應用實例創建成功！', 'success');
+                        
+                        // 檢查實例狀態
+                        if (window.testApp.isInitialized) {
+                            log('✅ 應用已成功初始化', 'success');
+                        } else {
+                            log('⚠️ 應用實例已創建但未完成初始化', 'warning');
+                        }
+                        
+                        // 顯示成功結果
+                        setTimeout(() => {
+                            const loadingScreen = document.getElementById('loading-screen');
+                            const testResult = document.getElementById('test-result');
+                            
+                            if (loadingScreen) loadingScreen.style.display = 'none';
+                            if (testResult) testResult.classList.remove('hidden');
+                            
+                            log('🎉 測試完成！應用程式可以正常運行', 'success');
+                        }, 1000);
+                        
+                    } catch (initError) {
+                        log(`❌ 應用實例創建失敗: ${initError.message}`, 'error');
+                        log(`錯誤詳情: ${initError.stack}`, 'error');
+                    }
+                    
+                } else {
+                    log('❌ VibeCodingAcademy 類別未找到', 'error');
+                }
+                
+                document.getElementById('init-app').disabled = true;
+                
+            } catch (error) {
+                log(`❌ 應用初始化失敗: ${error.message}`, 'error');
+            }
+        }
+
+        // 全域錯誤處理
+        window.addEventListener('error', (e) => {
+            log(`❌ 全域錯誤: ${e.message} (${e.filename}:${e.lineno})`, 'error');
+        });
+
+        // 初始化
+        document.addEventListener('DOMContentLoaded', () => {
+            log('📄 頁面載入完成，準備開始測試', 'success');
+        });
+
+        log('📜 逐步測試腳本已載入', 'info');
+    </script>
+</body>
+</html>

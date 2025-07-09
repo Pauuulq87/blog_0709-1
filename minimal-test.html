@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>最小化測試 - Vibe Coding Academy</title>
+    <!-- 只載入必要的CSS -->
+    <link rel="stylesheet" href="src/styles/global.css">
+    <style>
+        /* 額外的除錯樣式 */
+        .debug-info {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background: rgba(0,0,0,0.8);
+            color: #0f0;
+            padding: 10px;
+            border-radius: 5px;
+            font-family: monospace;
+            font-size: 12px;
+            z-index: 9999;
+        }
+        .test-step {
+            margin: 10px 0;
+            padding: 5px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 3px;
+        }
+        .status-ok { color: #0f0; }
+        .status-error { color: #f00; }
+        .status-warning { color: #ff0; }
+    </style>
+</head>
+<body>
+    <!-- 除錯信息面板 -->
+    <div class="debug-info">
+        <div id="debug-output">開始測試...</div>
+    </div>
+
+    <!-- 最小化的HTML結構 -->
+    <div id="app" class="app-container">
+        <header class="app-header">
+            <h1 class="app-title">🎮 Vibe Coding Academy</h1>
+            <p class="app-subtitle">遊戲化網站需求收集器</p>
+        </header>
+
+        <main class="main-content">
+            <!-- 測試Loading Screen -->
+            <div id="loading-screen" class="loading-screen" style="display: flex;">
+                <div class="loading-spinner"></div>
+                <p id="loading-text">正在初始化遊戲引擎...</p>
+            </div>
+
+            <!-- 測試用的簡單容器 -->
+            <div id="test-container" class="hidden">
+                <p>✅ 最小化測試成功！JavaScript正常執行。</p>
+                <button id="test-button" onclick="showSuccess()">點擊測試</button>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // 除錯輸出函數
+        function debugLog(message, status = 'ok') {
+            const output = document.getElementById('debug-output');
+            const timestamp = new Date().toLocaleTimeString();
+            const statusClass = `status-${status}`;
+            
+            output.innerHTML += `<div class="test-step"><span class="${statusClass}">[${timestamp}] ${message}</span></div>`;
+            console.log(`[MINIMAL TEST] ${message}`);
+        }
+
+        // 測試函數
+        function runMinimalTests() {
+            debugLog('🚀 開始最小化測試');
+
+            // 測試1: DOM基礎功能
+            try {
+                const app = document.getElementById('app');
+                if (app) {
+                    debugLog('✅ DOM查詢功能正常', 'ok');
+                } else {
+                    debugLog('❌ DOM查詢失敗', 'error');
+                }
+            } catch (error) {
+                debugLog(`❌ DOM測試錯誤: ${error.message}`, 'error');
+            }
+
+            // 測試2: CSS載入檢查
+            try {
+                const loadingScreen = document.getElementById('loading-screen');
+                const computedStyle = getComputedStyle(loadingScreen);
+                
+                debugLog(`Loading Screen display: ${computedStyle.display}`, 
+                    computedStyle.display === 'flex' ? 'ok' : 'error');
+                debugLog(`Loading Screen visibility: ${computedStyle.visibility}`, 
+                    computedStyle.visibility !== 'hidden' ? 'ok' : 'error');
+                
+            } catch (error) {
+                debugLog(`❌ CSS測試錯誤: ${error.message}`, 'error');
+            }
+
+            // 測試3: 基本JavaScript功能
+            try {
+                const testVar = { test: true };
+                const testArray = [1, 2, 3];
+                const testFunc = () => 'test';
+                
+                debugLog('✅ JavaScript基礎功能正常', 'ok');
+            } catch (error) {
+                debugLog(`❌ JavaScript基礎功能錯誤: ${error.message}`, 'error');
+            }
+
+            // 測試4: 事件系統
+            try {
+                document.addEventListener('test-event', () => {
+                    debugLog('✅ 事件系統正常', 'ok');
+                });
+                
+                const testEvent = new CustomEvent('test-event');
+                document.dispatchEvent(testEvent);
+            } catch (error) {
+                debugLog(`❌ 事件系統錯誤: ${error.message}`, 'error');
+            }
+
+            // 測試5: 嘗試顯示測試容器
+            setTimeout(() => {
+                try {
+                    const loadingScreen = document.getElementById('loading-screen');
+                    const testContainer = document.getElementById('test-container');
+                    
+                    if (loadingScreen && testContainer) {
+                        loadingScreen.style.display = 'none';
+                        testContainer.classList.remove('hidden');
+                        debugLog('✅ 界面切換測試成功', 'ok');
+                    }
+                } catch (error) {
+                    debugLog(`❌ 界面切換錯誤: ${error.message}`, 'error');
+                }
+            }, 2000);
+        }
+
+        // 成功測試函數
+        function showSuccess() {
+            debugLog('🎉 用戶互動測試成功！', 'ok');
+            alert('最小化測試完全成功！');
+        }
+
+        // 錯誤捕獲
+        window.addEventListener('error', (e) => {
+            debugLog(`❌ 全域錯誤: ${e.message} (${e.filename}:${e.lineno})`, 'error');
+        });
+
+        // 載入完成後執行測試
+        document.addEventListener('DOMContentLoaded', () => {
+            debugLog('📄 DOMContentLoaded 事件觸發', 'ok');
+            runMinimalTests();
+        });
+
+        // 確保腳本載入
+        debugLog('📜 最小化測試腳本已載入', 'ok');
+    </script>
+</body>
+</html>

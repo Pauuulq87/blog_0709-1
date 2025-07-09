@@ -83,11 +83,13 @@ class ProgressBar {
     // 綁定事件
     bindEvents() {
         // 為每個階段添加點擊事件
-        this.stages.forEach((stage, index) => {
-            stage.addEventListener('click', () => {
-                this.handleStageClick(index);
+        if (this.stages && this.stages.length > 0) {
+            this.stages.forEach((stage, index) => {
+                stage.addEventListener('click', () => {
+                    this.handleStageClick(index);
+                });
             });
-        });
+        }
     }
 
     // 設置進度
@@ -163,7 +165,8 @@ class ProgressBar {
 
     // 更新階段狀態
     updateStageStates(progress) {
-        this.stages.forEach((stage, index) => {
+        if (this.stages && this.stages.length > 0) {
+            this.stages.forEach((stage, index) => {
             const stageProgress = index + 1;
             
             if (stageProgress <= progress) {
@@ -177,6 +180,7 @@ class ProgressBar {
                 stage.classList.remove('stage-completed', 'stage-current');
             }
         });
+        }
     }
 
     // 下一個階段
